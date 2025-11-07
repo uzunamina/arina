@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Арина — поздравление 15</title>
+  <style>
+    :root {
+      --bg1:#0b0b0b;
+      --bg2:#2b0218;
+      --gold:#d4af37;
+      --bordo:#5b0b12;
+      --muted:#d9cfc8;
+      --pink:#ff7bbf;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      height:100%;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+      color:var(--muted);
+      overflow:hidden;
+    }
+
+    body{
+      display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at top right, #40102a, #0b0b0b 70%);
+      padding:24px;
+      position:relative;
+    }
+
+    /* блёстки */
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle,rgba(255,255,255,0.06) 1px,transparent 1px);
+      background-size:3px 3px;
+      pointer-events:none;
+      opacity:0.2;
+      animation: sparkle 8s linear infinite;
+    }
+    @keyframes sparkle{
+      from{transform:translate(0,0);}
+      to{transform:translate(-100px,-100px);}
+    }
+
+    .card{
+      width:min(920px,96vw);
+      max-width:980px;
+      border-radius:22px;
+      padding:28px 30px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      box-shadow:0 10px 35px rgba(0,0,0,0.6),0 0 30px rgba(212,175,55,0.1);
+      position:relative;
+      overflow:hidden;
+      backdrop-filter:blur(8px);
+    }
+
+    .top{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .title{font-size:30px;font-weight:700;color:var(--muted);margin:0;text-shadow:0 0 8px rgba(255,255,255,0.2)}
+    .subtitle{color:rgba(212,175,55,0.95);font-weight:700}
+
+    .center{display:flex;align-items:center;gap:28px;margin-top:20px}
+    .left{flex:1}
+    .right{width:220px;display:flex;align-items:center;justify-content:center}
+
+    .badge{
+      width:140px;height:140px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at 30% 30%, rgba(255,230,150,0.1), rgba(212,175,55,0.05));
+      border:2px solid rgba(212,175,55,0.25);
+      font-size:50px;color:var(--gold);font-weight:800;
+      box-shadow:0 0 25px rgba(212,175,55,0.2);
+      animation: glow 4s ease-in-out infinite alternate;
+    }
+    @keyframes glow{
+      from{box-shadow:0 0 10px rgba(212,175,55,0.2);}
+      to{box-shadow:0 0 30px rgba(212,175,55,0.6);}
+    }
+
+    .message{
+      background:rgba(255,255,255,0.02);
+      padding:18px;border-radius:12px;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow:0 0 15px rgba(255,255,255,0.05);
+    }
+    .message p{margin:0;font-size:18px;line-height:1.45}
+
+    .controls{display:flex;gap:12px;margin-top:16px}
+    .btn{
+      padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700;
+      transition:all .2s;
+    }
+    .btn.primary{background:var(--bordo);color:var(--muted);}
+    .btn.primary:hover{transform:scale(1.06);box-shadow:0 0 10px rgba(91,11,18,0.6);}
+    .btn.gold{background:transparent;color:var(--gold);border:1px solid rgba(212,175,55,0.25)}
+    .btn.gold:hover{background:rgba(212,175,55,0.08)}
+
+    .confetti-layer,.heart-layer{
+      position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;
+    }
+
+    .small{font-size:13px;color:rgba(217,207,200,0.7);margin-top:10px}
+
+    /* сердечки */
+    .heart{
+      position:absolute;
+      color:var(--pink);
+      font-size:18px;
+      opacity:0.8;
+      animation: floatHeart 6s ease-in infinite;
+      filter:drop-shadow(0 0 4px rgba(255,150,200,0.6));
+    }
+    @keyframes floatHeart{
+      0%{transform:translateY(0) scale(0.8) rotate(0deg);opacity:1;}
+      100%{transform:translateY(-800px) scale(1.3) rotate(360deg);opacity:0;}
+    }
+
+    @media (max-width:720px){
+      .center{flex-direction:column-reverse}
+      .right{width:100%}
+      .badge{width:110px;height:110px;font-size:36px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <canvas class="confetti-layer" id="confetti"></canvas>
+    <div class="heart-layer" id="hearts"></div>
+
+    <div class="top">
+      <div>
+        <h1 class="title">Милая Арина</h1>
+        <div class="small">Твои 15 — время улыбок, смелых мечт и тёплых моментов ✨</div>
+      </div>
+      <div class="subtitle"></div>
+    </div>
+
+    <div class="center">
+      <div class="left">
+        <div class="message" id="messageBox">
+          <p id="mainMsg">Арина, с Днём Рождения! Пусть твои 15 будут годом улыбок, вдохновения и чудес 💫</p>
+        </div>
+
+        <div class="controls">
+          <button class="btn primary" id="celebrateBtn">Нажми 💖</button>
+          <button class="btn gold" id="stopBtn">Остановить музыку</button>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="badge" id="numberBadge">15</div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="music" src="Ирина Аллегрова - С Днем Рождения.mp3" preload="auto"></audio>
+
+  <script>
+    // confetti
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight}
+    window.addEventListener('resize', resize);resize();
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+    function makePiece(x,y){
+      return {x,y,vx:rand(-6,6),vy:rand(-12,-4),size:rand(6,12),rot:rand(0,360),vr:rand(-8,8),color:randomColor(),life:rand(80,160)}
+    }
+    function randomColor(){const palette=['#d4af37','#ff7bbf','#ffffff','#b5651d','#5b0b12'];return palette[Math.floor(Math.random()*palette.length)]}
+    function burst(x,y,count=120){for(let i=0;i<count;i++)particles.push(makePiece(x,y))}
+    function update(){
+      ctx.clearRect(0,0,W,H);
+      for(let i=particles.length-1;i>=0;i--){
+        const p=particles[i];
+        p.x+=p.vx;p.y+=p.vy;p.vy+=0.2;p.rot+=p.vr;p.life--;
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle=p.color;
+        ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+        ctx.restore();
+        if(p.y>H+30||p.life<=0)particles.splice(i,1);
+      }
+      requestAnimationFrame(update);
+    }
+    update();
+
+    // hearts
+    const heartsLayer = document.getElementById('hearts');
+    function spawnHeart(){
+      const heart=document.createElement('div');
+      heart.className='heart';
+      heart.textContent='♥';
+      heart.style.left=Math.random()*100+'%';
+      heart.style.fontSize=12+Math.random()*24+'px';
+      heart.style.animationDuration=5+Math.random()*4+'s';
+      heartsLayer.appendChild(heart);
+      setTimeout(()=>heart.remove(),9000);
+    }
+
+    // elements
+    const celebrateBtn = document.getElementById('celebrateBtn');
+    const numberBadge = document.getElementById('numberBadge');
+    const mainMsg = document.getElementById('mainMsg');
+    const music = document.getElementById('music');
+    const stopBtn = document.getElementById('stopBtn');
+
+    celebrateBtn.addEventListener('click', ()=>{
+      celebrateBtn.animate([{transform:'scale(1)'},{transform:'scale(0.95)'},{transform:'scale(1)'}],{duration:220});
+      const rect = canvas.getBoundingClientRect();
+      burst(rect.width/2, rect.height/2, 160);
+      numberBadge.animate([{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(1)'}],{duration:700});
+      mainMsg.animate([{opacity:1},{opacity:0.6},{opacity:1}],{duration:900});
+      try{music.currentTime=0;music.play();}catch(e){console.log('audio play failed',e);}
+      for(let i=0;i<20;i++) setTimeout(spawnHeart, i*200);
+    });
+
+    stopBtn.addEventListener('click', ()=>{try{music.pause();music.currentTime=0;}catch(e){}});
+  </script>
+</body>
+</html>
